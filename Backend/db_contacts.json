@@ -1,0 +1,5 @@
+{   "1": {"email": null, "name": "Bob", "wallet_address": "0x93f6C12C3Bc6e70d6a58f159B69c175f13608379"}, 
+    "2": {"email": null, "name": "John", "wallet_address": "0x92a4C12C3Bc6e70d6a58f159B69c175f13608379"}, 
+    "3": {"email": "anne_email@gmail.com", "name": "Anne", "wallet_address": "0x92a4a13C3fc6e70d6a58f159B69c175f13608379"}, 
+    "4": {"email": null, "name": "sdaf", "wallet_address": null}
+}
