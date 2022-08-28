@@ -1,8 +1,1 @@
-{   "1": {"email": null, "name": "Bob", "wallet_address": "0x93f6C12C3Bc6e70d6a58f159B69c175f13608379"}, 
-    "2": {"email": null, "name": "John", "wallet_address": "0x92a4C12C3Bc6e70d6a58f159B69c175f13608379"}, 
-    "3": {"email": "anne_email@gmail.com", "name": "Anne", "wallet_address": "0x92a4a13C3fc6e70d6a58f159B69c175f13608379"}, 
-    "4": {"email": null, "name": "Ben", "wallet_address": "0x92a4C12C3Bc6e70d6a58f159B69c175f13608379"},
-    "5": {"email": null, "name": "Roger", "wallet_address": "0x92a4C13C3Bc6e70d6a58f159B69c175f13608379"},
-    "6": {"email": null, "name": "Larry", "wallet_address": "0x92a4C1aC3Bc6e70d6a58f159B69c175f13608379"},
-    "7": {"email": null, "name": "Alice", "wallet_address": "0xa2a4C12C3Bc6e70d6a58f159B69c175f13608379"}
-}
+{"1": {"email": null, "name": "Bob", "user_id": 1, "wallet_address": "0x93f6C12C3Bc6e70d6a58f159B69c175f13608379"}, "2": {"email": null, "name": "John", "user_id": 2, "wallet_address": "0x92a4C12C3Bc6e70d6a58f159B69c175f13608379"}, "3": {"email": "anne_email@gmail.com", "name": "Anne", "user_id": 3, "wallet_address": "0x92a4a13C3fc6e70d6a58f159B69c175f13608379"}, "4": {"email": null, "name": "Ben", "user_id": 4, "wallet_address": "0x92a4C12C3Bc6e70d6a58f159B69c175f13608379"}, "5": {"email": null, "name": "Roger", "user_id": 5, "wallet_address": "0x92a4C13C3Bc6e70d6a58f159B69c175f13608379"}, "6": {"email": null, "name": "Larry", "user_id": 6, "wallet_address": "0x92a4C1aC3Bc6e70d6a58f159B69c175f13608379"}, "7": {"email": null, "name": "Alice", "user_id": 7, "wallet_address": "0xa2a4C12C3Bc6e70d6a58f159B69c175f13608379"}, "8": {"email": "jaden@yahoo.com", "name": "Jaden", "user_id": 8, "wallet_address": "0x23412343189908123adsf"}, "9": {"email": "mark@yahoo.com", "name": "Mark", "user_id": 9, "wallet_address": "0x90834123kljsdaf"}}

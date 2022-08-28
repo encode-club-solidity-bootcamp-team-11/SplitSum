@@ -27,15 +27,14 @@ class Contacts(Resource):
         name = args['name']
         email = args['email']
         wallet_address = args['wallet_address']
-        new_contact_info = {"name": name, "email":email, 
-                        "wallet_address": wallet_address}
-
         with open(db_contacts) as db:
             contacts = json.load(db)
         keys = []
         for key, value in contacts.items():
             keys.append(int(key))
         item_id = str(max(keys) + 1)
+        new_contact_info = {"user_id":int(item_id), "name": name, "email":email, 
+                        "wallet_address": wallet_address}
         contacts[item_id] = new_contact_info      
         with open(db_contacts, 'w') as db_w:
             json.dump(contacts, db_w)
@@ -159,7 +158,7 @@ class Groups(Resource):
         group_id = str(max(keys) + 1)
         
 
-        new_group = {"group_id": group_id, "name":name, 
+        new_group = {"group_id": int(group_id), "name":name, 
                         "currency": currency, "members":members,
                         "description":description
                     }
