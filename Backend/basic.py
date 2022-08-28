@@ -8,6 +8,7 @@ splitsum = api.namespace('SplitSum', description='SplitSum methods')
 
 db_contacts = 'db_contacts.json'
 db_transactions = 'db_transactions.json'
+db_groups = 'db_groups.json'
 
 parser_contacts = reqparse.RequestParser()
 parser_contacts.add_argument('name', type=str, help='Name of user', required=True)
@@ -103,7 +104,7 @@ parser_settlement.add_argument('signature', type=str, help='Signature', required
 parser_settlement.add_argument('token_address', type=str, help='Group description')
 parser_settlement.add_argument('paid_by', type=str, help='User that paid', required=True)
 @splitsum.route('/transactions/settlement')
-class TransactionsExpense(Resource):
+class TransactionsSettlement(Resource):
     @splitsum.doc(parser=parser_settlement, description="Create a settlement transaction")
     def post(self):
         args = parser_settlement.parse_args()
@@ -129,6 +130,43 @@ class TransactionsExpense(Resource):
         with open(db_transactions, 'w') as db_w:
             json.dump(transactions, db_w)
         return new_settlement
+
+parser_group = reqparse.RequestParser()
+parser_group.add_argument('name', type=str, help='Name of group', required=True)
+parser_group.add_argument('currency', type=str, help='Currency being used', required=True)
+parser_group.add_argument('members', type=str, help='List of users in group', required=True, action="append")
+parser_group.add_argument('description', type=str, help='Group description')
+@splitsum.route('/groups')
+class Groups(Resource):
+    @splitsum.doc(description="Get all Groups")
+    def get(self):
+        with open(db_groups) as db:
+            groups = json.load(db)
+        return {"groups":list(groups.values())}
+    @splitsum.doc(parser=parser_group, description="Create a group")
+    def post(self):
+        args = parser_group.parse_args()
+        name = args['name']
+        members = args['members']
+        currency = args['currency']
+        description = args['description']
+
+        with open(db_groups) as db:
+            groups = json.load(db)
+        keys = []
+        for key, value in groups.items():
+            keys.append(int(key))
+        group_id = str(max(keys) + 1)
+        
+
+        new_group = {"group_id": group_id, "name":name, 
+                        "currency": currency, "members":members,
+                        "description":description
+                    }
+        groups[group_id] = new_group
+        with open(db_groups, 'w') as db_w:
+            json.dump(groups, db_w)
+        return new_group
 
 
 if __name__ == '__main__':
