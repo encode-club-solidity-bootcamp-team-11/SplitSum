@@ -144,3 +144,16 @@ def settle_expense(group_id, amount):
     print(tx_receipt['transactionHash'])
     return current_ts, tx_receipt['status'], me.address
 
+def list_group_memberships(group_id):
+    nonce = w3.eth.getTransactionCount(me.address)
+    group_id_bytes = w3.toBytes(hexstr=group_id)
+
+    output = counter.functions.listGroupMemberships(group_id_bytes).call()
+
+
+    # signed = w3.eth.account.signTransaction(txn, private_key)
+    # txn_hash = w3.eth.sendRawTransaction(signed.rawTransaction)
+    # tx_receipt = w3.eth.wait_for_transaction_receipt(txn_hash)
+    # print(tx_receipt['transactionHash'])
+    return output
+

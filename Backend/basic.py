@@ -2,10 +2,19 @@ from email.policy import default
 from venv import create
 from flask import Flask, request, render_template, json
 from flask_restx import Api, Resource, reqparse
-from sc import *
+from flask_cors import CORS
 
+from sc import *
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+private_key = os.getenv('PRIVATE_KEY')
+me = w3.eth.account.privateKeyToAccount(private_key)
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app, title='SplitSum')
 
 splitsum = api.namespace('', description='List of SplitSum methods')
@@ -187,6 +196,94 @@ class Groups(Resource):
             return new_group
 
 
+@splitsum.route('/groups/id')
+class GroupsById(Resource):
+    @splitsum.doc(description="Get all Groups")
+    def get(self):
+        with open(db_groups) as db:
+            groups = json.load(db)
+        return {"groups":list(groups.values())}
+
+
+parser_group_user = reqparse.RequestParser()
+parser_group_user.add_argument('user_addr', type=str, help='User address', required=True)
+# parser_group_user.add_argument('group_id', type=str, help='hash of group', required=True)
+
+@splitsum.route('/groups/user')
+class GroupsUser(Resource):
+    @splitsum.doc(parser=parser_group_user, description="Get all Groups user belongs to")
+    def get(self):
+        args = parser_group_user.parse_args()
+        user_addr = args['user_addr']
+        # group_id = args['group_id']
+        with open(db_groups) as db:
+            groups = json.load(db)
+        list_keys = []
+        for key, value in groups.items():
+            for key1, value1 in value.items():
+                if key1 == 'members':
+                    if user_addr in groups[key]['members']:
+                        list_keys.append(key)
+        data = {}
+        data1 = []
+        for key2 in list_keys:
+            data[key2] = groups[key2]
+            data1.append(groups[key2])
+        # print("test")
+        print(f"Groups: {data}")
+
+        print(f"Data1: {data1}")
+
+
+        for item in data1:
+            memberships = list_group_memberships(item['group_id'])
+            item['memberships'] = []
+            item['groupId'] = item.pop('group_id')
+            for membership in memberships:
+                item['memberships'].append({"walletAddress":membership[0], "balance":membership[1]})
+
+        print(f"Data1: {data1}")
+        
+
+        data = data1
+
+        
+
+    #     list_group_ids = []
+    #     for key, value in data.items():
+    #         for key1, value1 in value.items():
+    #             if key1 == 'group_id':
+    #                 list_group_ids.append(value1)
+
+    #     print(f"group ids: {list_group_ids}")
+    #     list_outputs = []
+    #     for item in list_group_ids:
+    #         list_outputs.append(list_group_memberships(item))
+
+    #     print(f"list of group outputs: {list_outputs}")
+    #     # output = list_group_memberships(group_id)
+
+    #     # for item in list_outputs:
+    # #    list = [membership, membership]
+    #     output_dict_list = []
+        
+    #     i = 0
+    #     for output in list_outputs:
+    #         for item in output:
+    #             output_dict = {}
+    #             output_dict[i] = {"walletAddress":item[0], "balance":item[1]}
+    #             i = i + 1
+    #             output_dict_list.append(output_dict)
+    #     i = 0
+    #     for key, value in data.items():
+    #         for key1, value1 in value.items():
+    #             if key1 == 'members':
+    #                 data[key]['members'] = output_dict_list[i]
+    #                 i = i + 1
+        return data
+        # data['members'] = output
+        # return list(data.values())
+
 parser_group_membership = reqparse.RequestParser()
 parser_group_membership.add_argument('group_id', type=str, help='hash of group', required=True)
 parser_group_membership.add_argument('member', type=str, help='User to add to group - Input wallet address')
@@ -256,6 +353,19 @@ class GroupsMembershipRemove(Resource):
                     json.dump(groups, db_w)
             return {"groups":list(groups[id].values())}
  
+parser_group_membership_list = reqparse.RequestParser()
+parser_group_membership_list.add_argument('group_id', type=str, help='hash of group', required=True)
+
+@splitsum.route('/groups/membership/list')
+class GroupsMembershipList(Resource):
+    @splitsum.doc(parser=parser_group_membership_list, description="List group membership")
+    def get(self):
+        args = parser_group_membership_list.parse_args()
+        group_id = args['group_id']
+
+        output = list_group_memberships(group_id)
+
+        return output
 if __name__ == '__main__':
     app.run()
 
